@@ -28,7 +28,7 @@
             </thead>
             <tbody>
                 <tr>
-                    <td> <span class="ListColCenter state_badge" style="background:#88b917"></span> <b> Ok </b> </td>
+                    <td> <span class="ListColCenter state_badge" style="background:#88b917"></span><a href="/centreon/main.php?p=20201&o=svc_ok&search=" target="_blank"><font color="#555"> <b> Ok </b></font></a> </td>
                     <td> {$services.OK.value} </td>
                     <td> {$services.OK.acknowledged} </td>
                     <td> {$services.OK.downtime} </td>
@@ -36,7 +36,7 @@
 
                 </tr>
                 <tr>
-                    <td> <span class="ListColCenter state_badge" style="background:#ff9a13"></span> <b> Warning </b> </td>
+                    <td> <span class="ListColCenter state_badge" style="background:#ff9a13"></span><a href="/centreon/main.php?p=20201&o=svc_warning&search=" target="_blank"> <font color="#555"><b> Warning </b></font></a> </td>
                     <td> {$services.WARNING.value} </td>
                     <td> {$services.WARNING.acknowledged} </td>
                     <td> {$services.WARNING.downtime} </td>
@@ -44,21 +44,21 @@
                 </tr>
                 <tr>
 
-                    <td> <span class="ListColCenter state_badge" style="background:#e00b3d"></span> <b> Critical </b> </td>
+                    <td> <span class="ListColCenter state_badge" style="background:#e00b3d"></span><a href="/centreon/main.php?p=20201&o=svc_critical&search=" target="_blank"><font color="#555"><b> Critical </b></font></a> </td>
                     <td> {$services.CRITICAL.value} </td>
                     <td> {$services.CRITICAL.acknowledged}</td>
                     <td> {$services.CRITICAL.downtime}</td>
                     <td> {$services.CRITICAL.percent}</td>
                 </tr>
                 <tr>
-                    <td> <span class="ListColCenter state_badge" style="background:#0072ce"></span> <b> Unknown </b> </td>
+                    <td> <span class="ListColCenter state_badge" style="background:#0072ce"></span><a href="/centreon/main.php?p=20201&o=svc_unknown&search=" target="_blank"> <font color="#555"><b> Unknown </b></font></a> </td>
                     <td> {$services.UNKNOWN.value} </td>
                     <td> {$services.UNKNOWN.acknowledged} </td>
                     <td> {$services.UNKNOWN.downtime} </td>
                     <td> {$services.UNKNOWN.percent} </td>
                 </tr>
                 <tr>
-                    <td> <span class="ListColCenter state_badge" style="background:#bcbdc0"></span> <b> Pending </b> </td>
+                    <td> <span class="ListColCenter state_badge" style="background:#bcbdc0"></span><a href="/centreon/main.php?p=20201&o=svc_pending&search=" target="_blank"> <font color="#555"><b> Pending </b></font></a> </td>
                     <td> {$services.PENDING.value} </td>
                     <td> {$services.PENDING.acknowledged} </td>
                     <td> {$services.PENDING.downtime} </td>
