@@ -54,6 +54,7 @@ if (!isset($_SESSION['centreon']) || !isset($_REQUEST['widgetId'])) {
 }
 
 $db = $dependencyInjector['configuration_db'];
+
 if (CentreonSession::checkSession(session_id(), $db) == 0) {
     exit;
 }
