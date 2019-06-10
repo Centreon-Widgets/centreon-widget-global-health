@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright 2005-2011 MERETHIS
- * Centreon is developped by : Julien Mathis and Romain Le Merlus under
+ * Copyright 2005-2019 Centreon
+ * Centreon is developed by : Julien Mathis and Romain Le Merlus under
  * GPL Licence 2.0.
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -57,7 +57,7 @@ try {
     $broker = "broker";
     $res = $db->query("SELECT `value` FROM `options` WHERE `key` = 'broker'");
     if ($res->rowCount()) {
-        $row = $res->fetchRow();
+        $row = $res->fetch();
         $broker = strtolower($row['value']);
     } else {
         throw new Exception('Unknown broker module');
@@ -92,11 +92,13 @@ try {
     var widgetId = <?php echo $widgetId; ?>;
     var autoRefresh = <?php echo $autoRefresh;?>;
     var timeout;
-    var itemsPerPage = <?php if (!empty($preferences['entries'])) {
+    var itemsPerPage = <?php
+    if (!empty($preferences['entries'])) {
         echo $preferences['entries'];
     } else {
         echo '50';
-    }?>;
+    }
+    ?>;
     var pageNumber = 0;
     var broker = '<?php echo $broker;?>';
 
