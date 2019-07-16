@@ -117,22 +117,12 @@ foreach ($tabSatusHost as $key => $statusHost) {
 $hgName = false;
 if (!empty($preferences['hostgroup'])) {
     $sql = "select hg.hg_name from hostgroup hg where hg.hg_id = " . $dbb->escape($preferences['hostgroup']);
-    $DBRESULT = $db->query($sql);
-    $row = $DBRESULT->fetchRow();
+    $dbResult = $db->query($sql);
+    $row = $dbResult->fetchRow();
     $hgName = $row['hg_name'];
 }
 
-if(isset($preferences['hosts_services']) && $preferences['hosts_services'] == "hosts"){
-        
-    $hgName = false;
-    if(!empty($preferences['hostgroup'])){
-        $sql = "select hg.hg_name from hostgroup hg where hg.hg_id = ".$dbb->escape($preferences['hostgroup'])."";
-        $DBRESULT = $db->query($sql);
-        $row = $DBRESULT->fetchRow();
-        $hgName = $row['hg_name'];
-    }
-    
-    
+if (isset($preferences['hosts_services']) && $preferences['hosts_services'] == "hosts") {
     $innerjoingroup = "";
     $wheregroup = "";
     if($hgName){
