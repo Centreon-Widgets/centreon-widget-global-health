@@ -7,7 +7,7 @@
 {/literal}
 </style>
     <h3 style="text-align: center;" > Global health of Services </h3>
-    <div id"container" style="text-align:center;">
+    <div id="container" style="text-align:center;">
         <div id="global_health_svc_div" style="text-align:center;display:inline-block;vertical-align: middle;"></div>
         <div id="global_health_table_div" class="global_health_div_tab" style="display:inline-block;vertical-align: middle;" >
             <table>
@@ -69,52 +69,50 @@
     </div>
 <script>
     {literal}
-        var pref= window.localStorage.getItem('pref');
-
-        var OK={/literal}{$services.OK.percent}{literal};
-        var WARNING={/literal}{$services.WARNING.percent}{literal};
-        var CRITICAL={/literal}{$services.CRITICAL.percent}{literal};
-        var UNKNOWN={/literal}{$services.UNKNOWN.percent}{literal};
-        var PENDING={/literal}{$services.PENDING.percent}{literal};
+        var OK = {/literal}{$services.OK.percent}{literal};
+        var WARNING = {/literal}{$services.WARNING.percent}{literal};
+        var CRITICAL = {/literal}{$services.CRITICAL.percent}{literal};
+        var UNKNOWN = {/literal}{$services.UNKNOWN.percent}{literal};
+        var PENDING = {/literal}{$services.PENDING.percent}{literal};
 
         var options = {
             chart: {
                 id:'svc',
-                width: 260,
-                type: 'pie',
+                width:260,
+                type:'pie'
             },
             legend: {
-                show: false,
+                show:false,
                 position:'bottom' 
             },
             responsive: [{
-                breakpoint: 480,
+                breakpoint:480,
                 options: {
                     chart: {
-                        width: 230
+                        width:230
                     }
                 }
             }],
-            dataLabels:{
+            dataLabels: {
                 style: {
-                    fontSize: '12px',
-                    fontFamily: 'Arial, sans-serif',
+                    fontSize:'12px',
+                    fontFamily:'Arial, sans-serif',
                     colors:['#000000']
                 },  
             },
             tooltip:{
                 fillSeriesColor: false,
             },
-            labels: ['Ok', 'Warning', 'Critical','Unknown', 'Pending'],
-            series: [OK, WARNING, CRITICAL,UNKNOWN, PENDING],
-            colors:['#87BD23','#FF4125', '#ED1B23', '#CDCDCD','#2AD1D4'],
+            labels:['Ok', 'Warning', 'Critical','Unknown', 'Pending'],
+            series:[OK, WARNING, CRITICAL,UNKNOWN, PENDING],
+            colors:['#87BD23','#FF4125', '#ED1B23', '#CDCDCD','#2AD1D4']
         };
 
-        if (pref == 1){
-            document.getElementById('global_health_table_div').style.display='none';
+        if (preference_table == 1) {
+            document.getElementById('global_health_table_div').style.display = 'none';
             options.legend.show = 'true'; 
-        }else{
-            document.getElementById('global_health_table_div').style.visibility='visible';
+        } else {
+            document.getElementById('global_health_table_div').style.visibility = 'visible';
         };
         
         var chart = new ApexCharts(
@@ -122,7 +120,5 @@
             options
         );
         chart.render();
-
    {/literal}
-
 </script>

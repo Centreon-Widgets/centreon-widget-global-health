@@ -95,8 +95,8 @@ try {
     }?>;
     var pageNumber = 0;
     var broker = '<?php echo $broker;?>';
-    var pref = '<?php echo $preferences['hide_table'];?>';
-    localStorage.setItem("pref",pref);
+    var preference_table = '<?php echo $preferences['hide_table'];?>';
+
     jQuery(function () {
         loadPage();
     });
