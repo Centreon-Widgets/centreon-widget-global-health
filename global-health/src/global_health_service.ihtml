@@ -110,7 +110,7 @@
 
         if (preference_table == 1) {
             document.getElementById('global_health_table_div').style.display = 'none';
-            options.legend.show = 'true'; 
+            options.legend.show = true; 
         } else {
             document.getElementById('global_health_table_div').style.visibility = 'visible';
         };

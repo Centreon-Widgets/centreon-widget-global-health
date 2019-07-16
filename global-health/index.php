@@ -78,7 +78,7 @@ try {
     <script type="text/javascript" src="../../include/common/javascript/widgetUtils.js"></script>
     <script type="text/javascript"
             src="../../include/common/javascript/jquery/plugins/treeTable/jquery.treeTable.min.js"></script>
-    <script src="../../include/common/javascript/charts/apexcharts.js" language="javascript"></script>
+    <script src="../../widgets/global-health/lib/apexcharts.js" language="javascript"></script>
 </head>
 <body>
 <div id='global_health'></div>
