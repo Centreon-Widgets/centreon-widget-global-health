@@ -77,7 +77,7 @@
         var UNKNOWN={/literal}{$services.UNKNOWN.percent}{literal};
         var PENDING={/literal}{$services.PENDING.percent}{literal};
 
-        var options1 = {
+        var options = {
             chart: {
                 id:'svc',
                 width: 260,
@@ -110,44 +110,9 @@
             colors:['#87BD23','#FF4125', '#ED1B23', '#CDCDCD','#2AD1D4'],
         };
 
-        var options2 = {
-            chart: {
-                id:'svc',
-                width: 260,
-                type: 'pie',
-            },
-            legend: {
-                show: true,
-                position:'bottom' 
-            },
-            responsive: [{
-                breakpoint: 480,
-                options: {
-                    chart: {
-                        width: 260
-                    }
-                }
-            }],
-            dataLabels:{
-                style: {
-                    fontSize: '12px',
-                    fontFamily: 'Arial, sans-serif',
-                    colors:['#000000']
-                },  
-            },
-            tooltip:{
-                fillSeriesColor: false,
-            },
-            labels: ['Ok', 'Warning', 'Critical','Unknown', 'Pending'],
-            series: [OK, WARNING, CRITICAL,UNKNOWN, PENDING],
-            colors:['#87BD23','#FF4125', '#ED1B23', '#CDCDCD','#2AD1D4'],
-        };
-
-        var options = options1;
-
         if (pref == 1){
             document.getElementById('global_health_table_div').style.display='none';
-            options=options2; 
+            options.legend.show = 'true'; 
         }else{
             document.getElementById('global_health_table_div').style.visibility='visible';
         };

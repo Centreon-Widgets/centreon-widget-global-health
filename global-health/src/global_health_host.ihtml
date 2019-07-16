@@ -71,7 +71,7 @@
         var UNREACHABLE={/literal}{$hosts.UNREACHABLE.percent}{literal};
         var PENDING={/literal}{$hosts.PENDING.percent}{literal};
 
-        var options1 = {
+        var options = {
             chart: {
                 id:'hosts',
                 width: 260,
@@ -104,44 +104,9 @@
             colors:['#87BD23', '#ED1B23', '#CDCDCD','#2AD1D4'],
         };
 
-        var options2 = {
-            chart: {
-                id:'hosts',
-                width: 260,
-                type: 'pie',
-            },
-            legend: {
-                show: true,
-                position:'bottom' 
-            },
-            responsive: [{
-                breakpoint: 480,
-                options: {
-                    chart: {
-                        width: 260
-                    }
-                }
-            }],
-            dataLabels:{
-                style: {
-                    fontSize: '12px',
-                    fontFamily: 'Arial, sans-serif',
-                    colors:['#000000']
-                },  
-            },
-            tooltip:{
-                fillSeriesColor: false,
-            },
-            labels: ['Up', 'Down', 'Unreachable', 'Pending'],
-            series: [UP, DOWN, UNREACHABLE, PENDING],
-            colors:['#87BD23', '#ED1B23', '#CDCDCD','#2AD1D4']
-        };
-
-        var options = options1;
-
         if (pref == 1){
             document.getElementById('global_health_table_div').style.display='none';
-            options=options2; 
+            options.legend.show = 'true'; 
         }else{
             document.getElementById('global_health_table_div').style.visibility='visible';
         };

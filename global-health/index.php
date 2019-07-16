@@ -37,6 +37,7 @@ require_once $centreon_path . 'bootstrap.php';
 require_once $centreon_path . 'www/class/centreon.class.php';
 require_once $centreon_path . 'www/class/centreonSession.class.php';
 require_once $centreon_path . 'www/class/centreonWidget.class.php';
+
 CentreonSession::start(1);
 if (!isset($_SESSION['centreon']) || !isset($_REQUEST['widgetId'])) {
     exit;
@@ -77,7 +78,8 @@ try {
     <script type="text/javascript" src="../../include/common/javascript/widgetUtils.js"></script>
     <script type="text/javascript"
             src="../../include/common/javascript/jquery/plugins/treeTable/jquery.treeTable.min.js"></script>
-    <script src="../../include/common/javascript/charts/apexcharts.js" language="javascript"></script></head>
+    <script src="../../include/common/javascript/charts/apexcharts.js" language="javascript"></script>
+</head>
 <body>
 <div id='global_health'></div>
 </body>
