@@ -77,6 +77,7 @@ $centreon = $_SESSION['centreon'];
 $widgetId = $_REQUEST['widgetId'];
 $widgetObj = new CentreonWidget($centreon, $db);
 $preferences = $widgetObj->getWidgetPreferences($widgetId);
+$template->assign('preferences', $preferences);
 $oreon = $_SESSION['centreon'];
 
 /**
@@ -163,7 +164,6 @@ if (isset($preferences['hosts_services']) && $preferences['hosts_services'] == '
     }
 
     $template->assign('hosts', $hostArray);
-    $template->assign('preferences', $preferences);
     $template->display('global_health_host.ihtml');
 
 } else if (isset($preferences['hosts_services']) && $preferences['hosts_services'] == 'services') {
@@ -248,7 +248,6 @@ if (isset($preferences['hosts_services']) && $preferences['hosts_services'] == '
     }
 
     $template->assign('services', $serviceArray);
-    $template->assign('preferences', $preferences);
     /**
      * Display Templates
      */
