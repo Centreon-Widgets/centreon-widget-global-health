@@ -91,40 +91,38 @@ $centreonLang = new CentreonLang($centreon_path, $oreon);
 $centreonLang->bindLang();
 
 
-	/**
-	 * Tab status
-	 */
-	$tabSatusHost 		= array(0 => "UP", 1 => "DOWN", 2 => "UNREACHABLE", 4 => "PENDING");
-	$tabSatusService 	= array(0 => "OK", 1 => "WARNING", 2 => "CRITICAL", 3 => "UNKNOWN", 4 => "PENDING");
+/**
+ * Tab status
+ */
+$tabSatusHost = array(0 => "UP", 1 => "DOWN", 2 => "UNREACHABLE", 4 => "PENDING");
+$tabSatusService = array(0 => "OK", 1 => "WARNING", 2 => "CRITICAL", 3 => "UNKNOWN", 4 => "PENDING");
 
-    $serviceArray = array();
-    $hostArray = array();
-    
-    foreach($tabSatusService as $key=>$statusService){
-        $serviceArray[$tabSatusService[$key]]['value'] = 0;
-        $serviceArray[$tabSatusService[$key]]['acknowledged'] = 0;
-        $serviceArray[$tabSatusService[$key]]['downtime'] = 0;
-        $serviceArray[$tabSatusService[$key]]['percent'] = 0;
-    }
-    
-    foreach($tabSatusHost as $key=>$statusHost){
-        $hostArray[$tabSatusHost[$key]]['value'] = 0;
-        $hostArray[$tabSatusHost[$key]]['acknowledged'] = 0;
-        $hostArray[$tabSatusHost[$key]]['downtime'] = 0;
-        $hostArray[$tabSatusHost[$key]]['percent'] = 0;
-    }
+$serviceArray = array();
+$hostArray = array();
 
-if(isset($preferences['hosts_services']) && $preferences['hosts_services'] == "hosts"){
-        
-    $hgName = false;
-    if(!empty($preferences['hostgroup'])){
-        $sql = "select hg.hg_name from hostgroup hg where hg.hg_id = ".$dbb->escape($preferences['hostgroup'])."";
-        $DBRESULT = $db->query($sql);
-        $row = $DBRESULT->fetchRow();
-        $hgName = $row['hg_name'];
-    }
-    
-    
+foreach ($tabSatusService as $key => $statusService) {
+    $serviceArray[$tabSatusService[$key]]['value'] = 0;
+    $serviceArray[$tabSatusService[$key]]['acknowledged'] = 0;
+    $serviceArray[$tabSatusService[$key]]['downtime'] = 0;
+    $serviceArray[$tabSatusService[$key]]['percent'] = 0;
+}
+
+foreach ($tabSatusHost as $key => $statusHost) {
+    $hostArray[$tabSatusHost[$key]]['value'] = 0;
+    $hostArray[$tabSatusHost[$key]]['acknowledged'] = 0;
+    $hostArray[$tabSatusHost[$key]]['downtime'] = 0;
+    $hostArray[$tabSatusHost[$key]]['percent'] = 0;
+}
+
+$hgName = false;
+if (!empty($preferences['hostgroup'])) {
+    $sql = "select hg.hg_name from hostgroup hg where hg.hg_id = " . $dbb->escape($preferences['hostgroup']);
+    $dbResult = $db->query($sql);
+    $row = $dbResult->fetchRow();
+    $hgName = $row['hg_name'];
+}
+
+if (isset($preferences['hosts_services']) && $preferences['hosts_services'] == "hosts") {
     $innerjoingroup = "";
     $wheregroup = "";
     if($hgName){
@@ -187,7 +185,12 @@ if(isset($preferences['hosts_services']) && $preferences['hosts_services'] == "h
         $innerjoingroup =  " INNER JOIN services_servicegroups ssg ON ssg.service_id = s.service_id and ssg.host_id = s.host_id " .
                            " INNER JOIN servicegroups sg ON ssg.servicegroup_id = sg.servicegroup_id and sg.name = '".$sgName."' ";
     }
-    
+
+    if ($hgName) {
+        $innerjoingroup .= ' INNER JOIN hosts_hostgroups hhg ON  h.host_id = hhg.host_id ' .
+            ' INNER JOIN hostgroups hg ON hhg.hostgroup_id = hg.hostgroup_id and hg.name = \'' . $hgName . '\' ';
+    }
+
 	global $is_admin;
 
 	$is_admin =  $oreon->user->admin;
