@@ -95,8 +95,6 @@ try {
     }?>;
     var pageNumber = 0;
     var broker = '<?php echo $broker;?>';
-    var preference_table = '<?php echo $preferences['hide_table'];?>';
-
     jQuery(function () {
         loadPage();
     });

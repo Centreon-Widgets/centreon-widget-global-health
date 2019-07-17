@@ -163,6 +163,7 @@ if (isset($preferences['hosts_services']) && $preferences['hosts_services'] == '
     }
 
     $template->assign('hosts', $hostArray);
+    $template->assign('preferences', $preferences);
     $template->display('global_health_host.ihtml');
 
 } else if (isset($preferences['hosts_services']) && $preferences['hosts_services'] == 'services') {
@@ -247,9 +248,10 @@ if (isset($preferences['hosts_services']) && $preferences['hosts_services'] == '
     }
 
     $template->assign('services', $serviceArray);
-
+    $template->assign('preferences', $preferences);
     /**
      * Display Templates
      */
     $template->display('global_health_service.ihtml');
+
 }

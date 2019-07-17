@@ -9,7 +9,7 @@
     <h3 style="text-align: center;"> Global health of Hosts </h3>
     <div id="container" style="text-align:center">
         <div id="global_health_host_div" style="text-align:center;display:inline-block;vertical-align: middle;"></div>
-        <div id="global_health_table_div" class="global_health_div_tab" style="display:inline-block;vertical-align: middle;" >
+        {if $preferences.hide_table != 1}<div id="global_health_table_div" class="global_health_div_tab" style="display:inline-block;vertical-align: middle;" >
             <table>
                 <thead>
                     <th>
@@ -60,7 +60,7 @@
                     </tr>
                 </tbody>
             </table>
-        </div>
+        {/if}</div>
     </div>
 <script>
     {literal}
@@ -102,13 +102,10 @@
             colors:['#87BD23', '#ED1B23', '#CDCDCD','#2AD1D4']
         };
 
-        if (preference_table == 1) {
-            document.getElementById('global_health_table_div').style.display = 'none';
+        {/literal}{if $preferences.hide_table}            
             options.legend.show = true; 
-        } else {
-            document.getElementById('global_health_table_div').style.visibility = 'visible';
-        };
-        
+        {/if}{literal}
+
         var chart = new ApexCharts(
             document.querySelector("#global_health_host_div"),
             options
