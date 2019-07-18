@@ -44,6 +44,7 @@ if (!isset($_SESSION['centreon']) || !isset($_REQUEST['widgetId'])) {
 }
 $centreon = $_SESSION['centreon'];
 $widgetId = $_REQUEST['widgetId'];
+
 try {
     $db = $dependencyInjector['configuration_db'];
     $widgetObj = new CentreonWidget($centreon, $db);
