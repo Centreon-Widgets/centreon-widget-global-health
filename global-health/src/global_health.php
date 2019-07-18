@@ -248,9 +248,9 @@ if (isset($preferences['hosts_services']) && $preferences['hosts_services'] == '
     }
 
     $template->assign('services', $serviceArray);
+
     /**
      * Display Templates
      */
     $template->display('global_health_service.ihtml');
-
 }
