@@ -64,22 +64,20 @@
     </div>
 <script>
     {literal}
-        let UP = {/literal}{$hosts.UP.percent}{literal};
-        let DOWN = {/literal}{$hosts.DOWN.percent}{literal};
-        let UNREACHABLE = {/literal}{$hosts.UNREACHABLE.percent}{literal};
-        let PENDING = {/literal}{$hosts.PENDING.percent}{literal};
+        var UP = {/literal}{$hosts.UP.percent}{literal};
+        var DOWN = {/literal}{$hosts.DOWN.percent}{literal};
+        var UNREACHABLE = {/literal}{$hosts.UNREACHABLE.percent}{literal};
+        var PENDING = {/literal}{$hosts.PENDING.percent}{literal};
 
-        let options = {
+        var options = {
             chart: {
                 id:'hosts',
                 width:260,
                 type:'pie',
-                height: 200,
             },
             legend: {
                 show:false,
-                position:'bottom',
-                offsetY:  40,
+                position:'bottom' 
             },
             responsive: [{
                 breakpoint:480,
@@ -99,14 +97,6 @@
             tooltip: {
                 fillSeriesColor: false,
             },
-            plotOptions: {
-                pie: {
-                    dataLabels: {
-                        offset: 0,
-                        minAngleToShowLabel: 25
-                    },
-                },            
-            },
             labels:['Up', 'Down', 'Unreachable', 'Pending'],
             series:[UP, DOWN, UNREACHABLE, PENDING],
             colors:['#87BD23', '#ED1B23', '#CDCDCD','#2AD1D4']
@@ -116,7 +106,7 @@
             options.legend.show = true; 
         {/if}{literal}
 
-        const chart = new ApexCharts(
+        var chart = new ApexCharts(
             document.querySelector("#global_health_host_div"),
             options
         );

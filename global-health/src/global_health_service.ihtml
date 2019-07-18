@@ -69,18 +69,17 @@
     </div>
 <script>
     {literal}
-        let OK = {/literal}{$services.OK.percent}{literal};
-        let WARNING = {/literal}{$services.WARNING.percent}{literal};
-        let CRITICAL = {/literal}{$services.CRITICAL.percent}{literal};
-        let UNKNOWN = {/literal}{$services.UNKNOWN.percent}{literal};
-        let PENDING = {/literal}{$services.PENDING.percent}{literal};
+        var OK = {/literal}{$services.OK.percent}{literal};
+        var WARNING = {/literal}{$services.WARNING.percent}{literal};
+        var CRITICAL = {/literal}{$services.CRITICAL.percent}{literal};
+        var UNKNOWN = {/literal}{$services.UNKNOWN.percent}{literal};
+        var PENDING = {/literal}{$services.PENDING.percent}{literal};
 
-        let options = {
+        var options = {
             chart: {
                 id:'svc',
                 width:260,
-                type:'pie',
-                height: 200,
+                type:'pie'
             },
             legend: {
                 show:false,
@@ -104,14 +103,6 @@
             tooltip:{
                 fillSeriesColor: false,
             },
-            plotOptions: {
-                pie: {
-                    dataLabels: {
-                        offset: 0,
-                        minAngleToShowLabel: 25
-                    },
-                },            
-            },
             labels:['Ok', 'Warning', 'Critical','Unknown', 'Pending'],
             series:[OK, WARNING, CRITICAL,UNKNOWN, PENDING],
             colors:['#87BD23','#FF4125', '#ED1B23', '#CDCDCD','#2AD1D4']
@@ -121,7 +112,7 @@
             options.legend.show = true; 
         {/if}{literal}
 
-        const chart = new ApexCharts(
+        var chart = new ApexCharts(
             document.querySelector("#global_health_svc_div"),
             options
         );
