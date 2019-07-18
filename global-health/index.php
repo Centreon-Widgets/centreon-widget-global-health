@@ -96,9 +96,11 @@ try {
     }?>;
     var pageNumber = 0;
     var broker = '<?php echo $broker;?>';
+
     jQuery(function () {
         loadPage();
     });
+
     /*
      * Load page
      */
