@@ -79,7 +79,6 @@
             legend: {
                 show:false,
                 position:'bottom',
-                offsetY:  40,
             },
             responsive: [{
                 breakpoint:480,
@@ -111,7 +110,7 @@
             series:[UP, DOWN, UNREACHABLE, PENDING],
             colors:['#87BD23', '#ED1B23', '#CDCDCD','#2AD1D4']
         };
-
+        //The legend appear when the user hide the table because the table include it originally 
         {/literal}{if $preferences.hide_table}            
             options.legend.show = true; 
         {/if}{literal}
