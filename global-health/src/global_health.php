@@ -187,7 +187,7 @@ if (isset($preferences['hosts_services']) && $preferences['hosts_services'] == '
     }
 
     if ($hgName) {
-        $innerjoingroup .= "INNER JOIN hosts_hostgroups hhg ON  h.host_id = hhg.host_id
+        $innerjoingroup .= "INNER JOIN hosts_hostgroups hhg ON h.host_id = hhg.host_id
             INNER JOIN hostgroups hg ON hhg.hostgroup_id = hg.hostgroup_id AND hg.name = '" . $hgName . "'";
     }
 
@@ -203,7 +203,7 @@ if (isset($preferences['hosts_services']) && $preferences['hosts_services'] == '
         $rq2 = "SELECT 
                 COUNT(DISTINCT s.state, s.host_id, s.service_id) COUNT,
                 s.state state,
-                SUM(s.acknowledged) as acknowledged,
+                SUM(s.acknowledged) AS acknowledged,
                 SUM(CASE WHEN s.scheduled_downtime_depth >= 1 THEN 1 ELSE 0 END) AS downtime
             FROM services s
                 INNER JOIN centreon_acl acl ON s.host_id  = acl.host_id AND s.service_id = acl.service_id
@@ -217,7 +217,7 @@ if (isset($preferences['hosts_services']) && $preferences['hosts_services'] == '
         $rq2 = "SELECT
                 COUNT(DISTINCT s.state, s.host_id, s.service_id) COUNT, 
                 s.state state,
-                SUM(s.acknowledged) as acknowledged,
+                SUM(s.acknowledged) AS acknowledged,
                 SUM(CASE WHEN s.scheduled_downtime_depth >= 1 THEN 1 ELSE 0 END) AS downtime
             FROM services s
                 INNER JOIN hosts h ON s.host_id = h.host_id " .
