@@ -107,17 +107,18 @@ foreach ($tabStatusHost as $key => $statusHost) {
     $hostArray[$tabStatusHost[$key]]['percent'] = 0;
 }
 
-if (isset($preferences['hosts_services']) && $preferences['hosts_services'] == 'hosts') {
-    $hgName = false;
-    if (!empty($preferences['hostgroup'])) {
-        $dbResult = $db->query(
-            "select hg.hg_name from hostgroup hg where hg.hg_id = " . $dbb->escape($preferences['hostgroup'])
-        );
-        $row = $dbResult->fetch();
+$hgName = false;
+// get hostgroup name if defined in preferences
+if (!empty($preferences['hostgroup'])) {
+    $stmt = $db->prepare('SELECT hg.hg_name FROM hostgroup hg WHERE hg.hg_id = :hostgroup_id');
+    $stmt->bindValue(':hostgroup_id', $preferences['hostgroup'], PDO::PARAM_INT);
+    $stmt->execute();
+    if ($row = $stmt->fetch()) {
         $hgName = $row['hg_name'];
     }
+}
 
-
+if (isset($preferences['hosts_services']) && $preferences['hosts_services'] == 'hosts') {
     $innerjoingroup = '';
     $wheregroup = '';
     if ($hgName) {
@@ -127,20 +128,22 @@ if (isset($preferences['hosts_services']) && $preferences['hosts_services'] == '
         ";
     }
 
-    /**$obj->DBC->escape($instance)
-     * Get DB informations for creating Flash
-     */
     $dbResult = $dbb->query(
-        "SELECT
-            count(DISTINCT h.name) cnt, 
-            h.state, 
-            SUM(h.acknowledged) as acknowledged,
+        'SELECT 
+            COUNT(DISTINCT h.name) cnt,
+            h.state,
+            SUM(h.acknowledged) AS acknowledged,
             SUM(CASE WHEN h.scheduled_downtime_depth >= 1 THEN 1 ELSE 0 END) AS downtime
-        FROM `hosts` h " . $innerjoingroup . "
-        WHERE h.enabled = 1 " .
-            $oreon->user->access->queryBuilder('AND', 'h.name', $oreon->user->access->getHostsString('NAME', $dbb)) . "
-            AND h.name NOT LIKE '_Module_%'
-        GROUP BY h.state ORDER BY h.state"
+        FROM `hosts` h ' . $innerjoingroup . '
+        WHERE h.enabled = 1 ' .
+            $oreon->user->access->queryBuilder(
+                'AND',
+                'h.name',
+                $oreon->user->access->getHostsString('NAME', $dbb)
+            ) . '
+        AND h.name NOT LIKE \'_Module_%\'
+        GROUP BY h.state
+        ORDER BY h.state'
     );
     $data = [];
     $color = [];
@@ -198,7 +201,7 @@ if (isset($preferences['hosts_services']) && $preferences['hosts_services'] == '
      */
     if (!$is_admin) {
         $rq2 = "SELECT 
-                count(DISTINCT s.state, s.host_id, s.service_id) count,
+                COUNT(DISTINCT s.state, s.host_id, s.service_id) COUNT,
                 s.state state,
                 SUM(s.acknowledged) as acknowledged,
                 SUM(CASE WHEN s.scheduled_downtime_depth >= 1 THEN 1 ELSE 0 END) AS downtime
@@ -212,7 +215,7 @@ if (isset($preferences['hosts_services']) && $preferences['hosts_services'] == '
             GROUP BY s.state ORDER by s.state";
     } else {
         $rq2 = "SELECT
-                count(DISTINCT s.state, s.host_id, s.service_id) count, 
+                COUNT(DISTINCT s.state, s.host_id, s.service_id) COUNT, 
                 s.state state,
                 SUM(s.acknowledged) as acknowledged,
                 SUM(CASE WHEN s.scheduled_downtime_depth >= 1 THEN 1 ELSE 0 END) AS downtime
