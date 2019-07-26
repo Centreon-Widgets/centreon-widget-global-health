@@ -93,11 +93,11 @@ try {
     var autoRefresh = <?php echo $autoRefresh;?>;
     var timeout;
     var itemsPerPage = <?php
-    if (!empty($preferences['entries'])) {
-        echo $preferences['entries'];
-    } else {
-        echo '50';
-    }
+        if (!empty($preferences['entries'])) {
+            echo $preferences['entries'];
+        } else {
+            echo '50';
+        }
     ?>;
     var pageNumber = 0;
     var broker = '<?php echo $broker;?>';
