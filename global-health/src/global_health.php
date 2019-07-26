@@ -123,8 +123,8 @@ if (isset($preferences['hosts_services']) && $preferences['hosts_services'] == '
     $wheregroup = '';
     if ($hgName) {
         $innerjoingroup = "
-            INNER JOIN hosts_hostgroups hhg ON  h.host_id = hhg.host_id
-            INNER JOIN hostgroups hg ON hhg.hostgroup_id = hg.hostgroup_id and hg.name = '" . $hgName . "'
+            INNER JOIN hosts_hostgroups hhg ON h.host_id = hhg.host_id
+            INNER JOIN hostgroups hg ON hhg.hostgroup_id = hg.hostgroup_id AND hg.name = '" . $hgName . "'
         ";
     }
 
@@ -181,14 +181,14 @@ if (isset($preferences['hosts_services']) && $preferences['hosts_services'] == '
     $innerjoingroup = '';
     if ($sgName) {
         $innerjoingroup = "
-            INNER JOIN services_servicegroups ssg ON ssg.service_id = s.service_id and ssg.host_id = s.host_id
-            INNER JOIN servicegroups sg ON ssg.servicegroup_id = sg.servicegroup_id and sg.name = '" . $sgName . "'
+            INNER JOIN services_servicegroups ssg ON ssg.service_id = s.service_id AND ssg.host_id = s.host_id
+            INNER JOIN servicegroups sg ON ssg.servicegroup_id = sg.servicegroup_id AND sg.name = '" . $sgName . "'
         ";
     }
 
     if ($hgName) {
         $innerjoingroup .= "INNER JOIN hosts_hostgroups hhg ON  h.host_id = hhg.host_id
-            INNER JOIN hostgroups hg ON hhg.hostgroup_id = hg.hostgroup_id and hg.name = '" . $hgName . "'";
+            INNER JOIN hostgroups hg ON hhg.hostgroup_id = hg.hostgroup_id AND hg.name = '" . $hgName . "'";
     }
 
     global $is_admin;
