@@ -172,7 +172,7 @@ if (isset($preferences['hosts_services']) && $preferences['hosts_services'] == '
     $sgName = false;
     if (!empty($preferences['servicegroup'])) {
         $dbResult = $db->query(
-            "select sg.sg_name from servicegroup sg where sg.sg_id = " . $dbb->escape($preferences['servicegroup'])
+            "SELECT sg.sg_name FROM servicegroup sg WHERE sg.sg_id = " . $dbb->escape($preferences['servicegroup'])
         );
         $row = $dbResult->fetch();
         $sgName = $row['sg_name'];
