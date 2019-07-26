@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2005-2015 Centreon
+ * Copyright 2005-2019 Centreon
  * Centreon is developed by : Julien Mathis and Romain Le Merlus under
  * GPL Licence 2.0.
  *
@@ -110,8 +110,7 @@ foreach ($tabStatusHost as $key => $statusHost) {
 $hgName = false;
 // get hostgroup name if defined in preferences
 if (!empty($preferences['hostgroup'])) {
-    $sql = 'select hg.hg_name from hostgroup hg where hg.hg_id = :hostgroup_id';
-    $stmt = $db->prepare($sql);
+    $stmt = $db->prepare('SELECT hg.hg_name FROM hostgroup hg WHERE hg.hg_id = :hostgroup_id');
     $stmt->bindValue(':hostgroup_id', $preferences['hostgroup'], PDO::PARAM_INT);
     $stmt->execute();
     if ($row = $stmt->fetch()) {
@@ -123,31 +122,37 @@ if (isset($preferences['hosts_services']) && $preferences['hosts_services'] == '
     $innerjoingroup = '';
     $wheregroup = '';
     if ($hgName) {
-        $innerjoingroup = ' INNER JOIN hosts_hostgroups hhg ON  h.host_id = hhg.host_id ' .
-            ' INNER JOIN hostgroups hg ON hhg.hostgroup_id = hg.hostgroup_id and hg.name = \'' . $hgName . '\' ';
+        $innerjoingroup = "
+            INNER JOIN hosts_hostgroups hhg ON h.host_id = hhg.host_id
+            INNER JOIN hostgroups hg ON hhg.hostgroup_id = hg.hostgroup_id AND hg.name = '" . $hgName . "'
+        ";
     }
 
-    $rq1 = ' SELECT count(DISTINCT h.name) cnt, h.state, SUM(h.acknowledged) as acknowledged, ' .
-        'SUM(CASE WHEN h.scheduled_downtime_depth >= 1 THEN 1 ELSE 0 END) AS downtime ' .
-        'FROM `hosts` h ' .
-        $innerjoingroup .
-        'WHERE h.enabled = 1 ' .
-        $oreon->user->access->queryBuilder('AND', 'h.name', $oreon->user->access->getHostsString('NAME', $dbb)) .
-        ' AND h.name NOT LIKE \'_Module_%\' ' .
-        ' GROUP BY h.state ' .
-        ' ORDER BY h.state';
-    $dbResult = $dbb->query($rq1);
+    $dbResult = $dbb->query(
+        'SELECT 
+            COUNT(DISTINCT h.name) cnt,
+            h.state,
+            SUM(h.acknowledged) AS acknowledged,
+            SUM(CASE WHEN h.scheduled_downtime_depth >= 1 THEN 1 ELSE 0 END) AS downtime
+        FROM `hosts` h ' . $innerjoingroup . '
+        WHERE h.enabled = 1 ' .
+            $oreon->user->access->queryBuilder(
+                'AND',
+                'h.name',
+                $oreon->user->access->getHostsString('NAME', $dbb)
+            ) . '
+        AND h.name NOT LIKE \'_Module_%\'
+        GROUP BY h.state
+        ORDER BY h.state'
+    );
     $data = [];
     $color = [];
     $legend = [];
     $counter = 0;
-    while ($ndo = $dbResult->fetchRow()) {
+    while ($ndo = $dbResult->fetch()) {
         $data[$ndo['state']]['count'] = $ndo['cnt'];
         $data[$ndo['state']]['acknowledged'] = $ndo['acknowledged'];
         $data[$ndo['state']]['downtime'] = $ndo['downtime'];
-        //$data[] = $ndo['cnt'];
-        //$legend[] = $tabStatusHost[$ndo['state']];
-        //$color[] = $oreon->optGen['color_'.strtolower($tabStatusHost[$ndo['state']])];
         $counter += $ndo['cnt'];
     }
     $dbResult->closeCursor();
@@ -159,30 +164,31 @@ if (isset($preferences['hosts_services']) && $preferences['hosts_services'] == '
         $hostArray[$tabStatusHost[$key]]['percent'] = $valuePercent;
         $hostArray[$tabStatusHost[$key]]['acknowledged'] = $value['acknowledged'];
         $hostArray[$tabStatusHost[$key]]['downtime'] = $value['downtime'];
-        //$hostArray[$tabStatusHost[$key]]['color'] = $oreon->optGen['color_'.strtolower($tabStatusHost[$key])];
     }
 
     $template->assign('hosts', $hostArray);
     $template->display('global_health_host.ihtml');
-
-} else if (isset($preferences['hosts_services']) && $preferences['hosts_services'] == 'services') {
+} elseif (isset($preferences['hosts_services']) && $preferences['hosts_services'] == 'services') {
     $sgName = false;
     if (!empty($preferences['servicegroup'])) {
-        $sql = 'select sg.sg_name from servicegroup sg where sg.sg_id = ' . $dbb->escape($preferences['servicegroup']);
-        $dbResult = $db->query($sql);
-        $row = $dbResult->fetchRow();
+        $dbResult = $db->query(
+            "SELECT sg.sg_name FROM servicegroup sg WHERE sg.sg_id = " . $dbb->escape($preferences['servicegroup'])
+        );
+        $row = $dbResult->fetch();
         $sgName = $row['sg_name'];
     }
 
     $innerjoingroup = '';
     if ($sgName) {
-        $innerjoingroup = ' INNER JOIN services_servicegroups ssg ON ssg.service_id = s.service_id and ssg.host_id = s.host_id ' .
-            ' INNER JOIN servicegroups sg ON ssg.servicegroup_id = sg.servicegroup_id and sg.name = \'' . $sgName . '\' ';
+        $innerjoingroup = "
+            INNER JOIN services_servicegroups ssg ON ssg.service_id = s.service_id AND ssg.host_id = s.host_id
+            INNER JOIN servicegroups sg ON ssg.servicegroup_id = sg.servicegroup_id AND sg.name = '" . $sgName . "'
+        ";
     }
 
-    if ($hgName){
-        $innerjoingroup .= ' INNER JOIN hosts_hostgroups hhg ON  h.host_id = hhg.host_id ' .
-            ' INNER JOIN hostgroups hg ON hhg.hostgroup_id = hg.hostgroup_id and hg.name = \'' . $hgName . '\' ';
+    if ($hgName) {
+        $innerjoingroup .= "INNER JOIN hosts_hostgroups hhg ON h.host_id = hhg.host_id
+            INNER JOIN hostgroups hg ON hhg.hostgroup_id = hg.hostgroup_id AND hg.name = '" . $hgName . "'";
     }
 
     global $is_admin;
@@ -194,29 +200,32 @@ if (isset($preferences['hosts_services']) && $preferences['hosts_services'] == '
      * Get DB informations for creating Flash
      */
     if (!$is_admin) {
-        $rq2 = ' SELECT count(DISTINCT s.state, s.host_id, s.service_id) count, s.state state, ' .
-            ' SUM(s.acknowledged) as acknowledged, ' .
-            ' SUM(CASE WHEN s.scheduled_downtime_depth >= 1 THEN 1 ELSE 0 END) AS downtime  ' .
-            ' FROM services s ' .
-            ' INNER JOIN centreon_acl acl ON s.host_id  = acl.host_id AND s.service_id = acl.service_id ' .
-            ' INNER JOIN hosts h ON s.host_id = h.host_id ' .
-            $innerjoingroup .
-            ' WHERE h.name NOT LIKE \'_Module_%\' ' .
-            ' AND h.enabled = 1 ' .
-            ' AND s.enabled = 1 ' .
-            ' AND acl.group_id IN (' . $grouplistStr . ') ' .
-            ' GROUP BY s.state ORDER by s.state';
+        $rq2 = "SELECT 
+                COUNT(DISTINCT s.state, s.host_id, s.service_id) COUNT,
+                s.state state,
+                SUM(s.acknowledged) AS acknowledged,
+                SUM(CASE WHEN s.scheduled_downtime_depth >= 1 THEN 1 ELSE 0 END) AS downtime
+            FROM services s
+                INNER JOIN centreon_acl acl ON s.host_id  = acl.host_id AND s.service_id = acl.service_id
+                INNER JOIN hosts h ON s.host_id = h.host_id " . $innerjoingroup . "
+            WHERE h.name NOT LIKE '_Module_%'
+                AND h.enabled = 1
+                AND s.enabled = 1
+                AND acl.group_id IN (" . $grouplistStr . ")
+            GROUP BY s.state ORDER by s.state";
     } else {
-        $rq2 = ' SELECT count(DISTINCT s.state, s.host_id, s.service_id) count, s.state state, ' .
-            ' SUM(s.acknowledged) as acknowledged, ' .
-            ' SUM(CASE WHEN s.scheduled_downtime_depth >= 1 THEN 1 ELSE 0 END) AS downtime  ' .
-            ' FROM services s' .
-            ' INNER JOIN hosts h ON s.host_id = h.host_id ' .
-            $innerjoingroup .
-            ' WHERE h.name NOT LIKE \'_Module_%\' ' .
-            ' AND h.enabled = 1 ' .
-            ' AND s.enabled = 1 ' .
-            ' GROUP BY s.state ORDER by s.state';
+        $rq2 = "SELECT
+                COUNT(DISTINCT s.state, s.host_id, s.service_id) COUNT, 
+                s.state state,
+                SUM(s.acknowledged) AS acknowledged,
+                SUM(CASE WHEN s.scheduled_downtime_depth >= 1 THEN 1 ELSE 0 END) AS downtime
+            FROM services s
+                INNER JOIN hosts h ON s.host_id = h.host_id " .
+                $innerjoingroup . "
+            WHERE h.name NOT LIKE '_Module_%'
+                AND h.enabled = 1
+                AND s.enabled = 1
+            GROUP BY s.state ORDER by s.state";
     }
     $dbResult = $dbb->query($rq2);
 
@@ -225,7 +234,7 @@ if (isset($preferences['hosts_services']) && $preferences['hosts_services'] == '
     $color = [];
     $legend = [];
     $counter = 0;
-    while ($data = $dbResult->fetchRow()) {
+    while ($data = $dbResult->fetch()) {
         $info[$data['state']]['count'] = $data['count'];
         $info[$data['state']]['acknowledged'] = $data['acknowledged'];
         $info[$data['state']]['downtime'] = $data['downtime'];
