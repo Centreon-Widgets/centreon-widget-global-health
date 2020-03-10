@@ -75,7 +75,7 @@ $template->assign('svc_label', _('Services'));
 
 $centreon = $_SESSION['centreon'];
 
-$widgetId = filter_var($_REQUEST['widgetId'],FILTER_VALIDATE_INT);
+$widgetId = filter_var($_REQUEST['widgetId'], FILTER_VALIDATE_INT);
 if ($widgetId === false) {
     throw new InvalidArgumentException('Widget ID must be an integer');
 }
