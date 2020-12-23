@@ -1,6 +1,7 @@
 <?php
-/**
- * Copyright 2005-2015 Centreon
+
+/*
+ * Copyright 2005-2020 Centreon
  * Centreon is developed by : Julien Mathis and Romain Le Merlus under
  * GPL Licence 2.0.
  *
@@ -151,9 +152,6 @@ if (isset($preferences['hosts_services']) && $preferences['hosts_services'] == '
         $data[$ndo['state']]['count'] = $ndo['cnt'];
         $data[$ndo['state']]['acknowledged'] = $ndo['acknowledged'];
         $data[$ndo['state']]['downtime'] = $ndo['downtime'];
-        //$data[] = $ndo['cnt'];
-        //$legend[] = $tabStatusHost[$ndo['state']];
-        //$color[] = $oreon->optGen['color_'.strtolower($tabStatusHost[$ndo['state']])];
         $counter += $ndo['cnt'];
     }
     $dbResult->closeCursor();
@@ -165,13 +163,12 @@ if (isset($preferences['hosts_services']) && $preferences['hosts_services'] == '
         $hostArray[$tabStatusHost[$key]]['percent'] = $valuePercent;
         $hostArray[$tabStatusHost[$key]]['acknowledged'] = $value['acknowledged'];
         $hostArray[$tabStatusHost[$key]]['downtime'] = $value['downtime'];
-        //$hostArray[$tabStatusHost[$key]]['color'] = $oreon->optGen['color_'.strtolower($tabStatusHost[$key])];
     }
 
     $template->assign('hosts', $hostArray);
     $template->display('global_health_host.ihtml');
 
-} else if (isset($preferences['hosts_services']) && $preferences['hosts_services'] == 'services') {
+} elseif (isset($preferences['hosts_services']) && $preferences['hosts_services'] == 'services') {
     $sgName = false;
     if (!empty($preferences['servicegroup'])) {
         $sql = 'select sg.sg_name from servicegroup sg where sg.sg_id = ' . $dbb->escape($preferences['servicegroup']);
@@ -182,11 +179,12 @@ if (isset($preferences['hosts_services']) && $preferences['hosts_services'] == '
 
     $innerjoingroup = '';
     if ($sgName) {
-        $innerjoingroup = ' INNER JOIN services_servicegroups ssg ON ssg.service_id = s.service_id and ssg.host_id = s.host_id ' .
-            ' INNER JOIN servicegroups sg ON ssg.servicegroup_id = sg.servicegroup_id and sg.name = \'' . $sgName . '\' ';
+        $innerjoingroup = ' INNER JOIN services_servicegroups ssg ON ssg.service_id = s.service_id ' .
+            'and ssg.host_id = s.host_id INNER JOIN servicegroups sg ON ssg.servicegroup_id = sg.servicegroup_id ' .
+            'and sg.name = \'' . $sgName . '\' ';
     }
 
-    if ($hgName){
+    if ($hgName) {
         $innerjoingroup .= ' INNER JOIN hosts_hostgroups hhg ON  h.host_id = hhg.host_id ' .
             ' INNER JOIN hostgroups hg ON hhg.hostgroup_id = hg.hostgroup_id and hg.name = \'' . $hgName . '\' ';
     }
