@@ -77,7 +77,7 @@ try {
           trendChartType: 'NONE'
         )
 
-        withSonarQubeEnv('SonarQube') {
+        withSonarQubeEnv('SonarQubeDev') {
           sh "./centreon-build/jobs/widgets/${serie}/widget-analysis.sh"
         }
       }
